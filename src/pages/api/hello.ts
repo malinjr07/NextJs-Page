@@ -1,18 +1,36 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const handler = (req: NextApiRequest, res: NextApiResponse): void => {
-  const methodHandlers = {
-    GET: (): void => res.status(200).json({ message: 'GET' }),
-    POST: (): void => res.status(201).json({ message: 'POST' }),
-    DELETE: (): void => res.status(200).json({ message: 'DELETE' }),
-    default: (): void => res.status(405).json({ error: 'Method not allowed' }),
-  };
+type tHandler = (
+  req: NextApiRequest,
+  res: NextApiResponse,
+) => Promise<void> | void;
 
-  const handlerFunc =
-    methodHandlers[req.method as keyof typeof methodHandlers] ||
-    methodHandlers.default;
+const getTodos = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+): Promise<void> => {
+  // Simulate fetching todos from a database
+  console.log(req);
+  console.log(res);
+};
+const createTodo = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+): Promise<void> => {
+  // Simulate fetching todos from a database
+  console.log(req);
+  console.log(res);
+};
 
-  return handlerFunc();
+const handler: tHandler = (req, res) => {
+  switch (req.method) {
+    case 'GET':
+      return getTodos(req, res);
+    case 'POST':
+      return createTodo(req, res);
+    default:
+      return res.status(405).json({ message: 'Method not allowed' });
+  }
 };
 
 export default handler;
