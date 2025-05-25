@@ -1,13 +1,18 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-type Data = {
-  name: string;
+const handler = (req: NextApiRequest, res: NextApiResponse): void => {
+  const methodHandlers = {
+    GET: (): void => res.status(200).json({ message: 'GET' }),
+    POST: (): void => res.status(201).json({ message: 'POST' }),
+    DELETE: (): void => res.status(200).json({ message: 'DELETE' }),
+    default: (): void => res.status(405).json({ error: 'Method not allowed' }),
+  };
+
+  const handlerFunc =
+    methodHandlers[req.method as keyof typeof methodHandlers] ||
+    methodHandlers.default;
+
+  return handlerFunc();
 };
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>,
-) {
-  res.status(200).json({ name: "John Doe" });
-}
+export default handler;
